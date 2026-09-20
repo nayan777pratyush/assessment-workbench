@@ -1,0 +1,27 @@
+import "dotenv/config";
+
+export const ENV = {
+  appId: process.env.VITE_APP_ID ?? "assessment-workbench",
+  appUrl: process.env.APP_URL?.replace(/\/$/, "") ?? "",
+  cookieSecret: process.env.JWT_SECRET ?? "",
+  databaseUrl: process.env.DATABASE_URL ?? "",
+  databaseSsl: process.env.DATABASE_SSL === "true",
+  dbPoolMax: Number(process.env.DB_POOL_MAX ?? "10"),
+  githubClientId: process.env.GITHUB_CLIENT_ID ?? "",
+  githubClientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
+  oidcIssuerUrl: process.env.OIDC_ISSUER_URL ?? "",
+  oidcClientId: process.env.OIDC_CLIENT_ID ?? "",
+  oidcClientSecret: process.env.OIDC_CLIENT_SECRET ?? "",
+  oidcAllowedDomains: (process.env.OIDC_ALLOWED_DOMAINS ?? "").split(",").map(value => value.trim().toLowerCase()).filter(Boolean),
+  oidcDisplayName: process.env.OIDC_DISPLAY_NAME ?? "Institution SSO",
+  googleClientId: process.env.GOOGLE_CLIENT_ID ?? "",
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+  googleIssuerUrl: process.env.GOOGLE_OIDC_ISSUER_URL ?? "https://accounts.google.com",
+  microsoftClientId: process.env.MICROSOFT_CLIENT_ID ?? "",
+  microsoftClientSecret: process.env.MICROSOFT_CLIENT_SECRET ?? "",
+  microsoftIssuerUrl: process.env.MICROSOFT_OIDC_ISSUER_URL ?? "https://login.microsoftonline.com/common/v2.0",
+  emailApiKey: process.env.EMAIL_API_KEY ?? "",
+  emailFrom: process.env.EMAIL_FROM ?? "Assessment Workbench <no-reply@example.com>",
+  aiApiKey: process.env.AI_API_KEY ?? "",
+  aiModel: process.env.AI_MODEL ?? "gpt-5.6-luna",
+};
