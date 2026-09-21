@@ -399,7 +399,10 @@ useEffect(() => {
       <Preflight
         assignment={assignment}
         streams={assessmentStreams}
-        onBack={() => setMode("list")}
+        onBack={() => {
+          stopAssessmentStreams();
+          setMode("list");
+        }}
         onStart={finishPreflight}
         theme={theme}
         toggleTheme={toggleTheme ?? (() => {})}
@@ -473,7 +476,15 @@ useEffect(() => {
               onClick={() => setTab(t)}
             >
               {t[0].toUpperCase() + t.slice(1)}{" "}
-              <b>{data.filter(a => a.assignmentStatus === t).length}</b>
+              <b>
+                {t === "pending"
+                  ? data.filter(a =>
+                      ["assigned", "started", "pending"].includes(
+                        a.assignmentStatus
+                      )
+                    ).length
+                  : data.filter(a => a.assignmentStatus === t).length}
+              </b>
             </button>
           ))}
         </div>
@@ -635,6 +646,15 @@ function Preflight({
   });
   const [busy, setBusy] = useState<CheckId | null>(null);
   const video = useRef<HTMLVideoElement>(null);
+
+useEffect(() => {
+  const stream = streams.current.camera;
+
+  if (!video.current || !stream) return;
+
+  video.current.srcObject = stream;
+  void video.current.play().catch(() => {});
+}, [checks.camera, streams]);
   
   const rows: [CheckId, string, string, any][] = [
     [
@@ -803,9 +823,15 @@ function Preflight({
             </div>
             <div className="camera-box">
               {checks.camera ? (
-                <video ref={video} muted playsInline />
+                <video 
+                  ref={video}
+                  className="camera-video"
+                  muted
+                  playsInline
+                  autoPlay 
+                />
               ) : (
-                <UserCheck size={58} />
+                <UserCheck className="preview-fallback" size={46} />
               )}
             </div>
             <p>
